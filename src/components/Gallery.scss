@@ -1,0 +1,27 @@
+.gallery {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+
+    &__img {
+        width: 100%;
+        animation: smoothAppear .3s ease;
+    }
+
+    &__caption {
+        margin-top: 4px;
+    }
+}
+
+@keyframes smoothAppear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

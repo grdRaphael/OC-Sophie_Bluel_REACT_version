@@ -1,0 +1,58 @@
+.hero {
+    display: flex;
+    align-items: center;
+    gap: 72px;
+    margin: 139px 0;
+
+    &__photo {
+        height: 355px;
+    }
+
+    &__intro {
+        flex: 1;
+
+        &-title {
+            margin-bottom: 1em;
+        }
+
+        &-text {
+            margin-bottom: 0.5em;
+        }
+    }
+}
+
+.portfolio {
+
+    &__header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        margin: 92px 0 50px;
+    }
+
+    &__title {
+        text-align: center;
+    }
+
+    &__edit-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: none;
+        background: none;
+        font-family: "Work Sans", sans-serif;
+        font-size: 14px;
+        color: var(--main-color);
+        cursor: pointer;
+        transition: transform .1s ease;
+
+        &:active {
+            transform: translateY(2px);
+        }
+
+        img {
+            height: 15.58px;
+        }
+    }
+}

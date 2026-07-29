@@ -1,0 +1,28 @@
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 50px 0;
+
+    &__btn {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        border: 1px solid var(--green);
+        background-color: transparent;
+        color: var(--green);
+        padding: 8px 20px;
+        border-radius: 60px;
+        cursor: pointer;
+        transition: transform .3s ease, background-color .3s ease, color .3s ease;
+
+        &:active {
+            transform: translateY(2px);
+        }
+
+        &--active {
+            background-color: var(--green);
+            color: #fff;
+        }
+    }
+}

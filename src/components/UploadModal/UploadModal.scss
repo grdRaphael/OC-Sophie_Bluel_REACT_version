@@ -1,0 +1,128 @@
+.upload-modal {
+    position: fixed;
+    height: 100vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    width: 630px;
+    padding: 50px 100px;
+    border-radius: 10px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    
+    &__title {
+        text-align: center;
+        font-family: "Work Sans", sans-serif;
+        font-size: 26px;
+        font-weight: 400;
+        color: #000;
+    }
+
+    &__return,
+    &__close {
+        position: absolute;
+        top: 26px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: transform .3s ease;
+
+        &:active {
+            transform: scale(.9);
+        }
+
+        img {
+            height: 24px;
+        }
+    }
+
+    &__return {
+        left: 30px;
+    }
+
+    &__close {
+        right: 30px;
+    }
+
+    &__box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background-color: #e8f1f6;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    &__box-icon {
+        height: 58px;
+    }
+
+    &__box-label {
+        color: #306685;
+        background-color: #cbd6dc;
+        padding: 8px 33px;
+        border-radius: 50px;
+        font-size: 14px;
+    }
+
+    &__box-info {
+        font-size: 10px;
+        color: #444460;
+    }
+
+    &__box-preview{
+        height: 200px;
+    }
+
+    &__file {
+        display: none;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__label {
+        font-weight: 500;
+        color: var(--main-color);
+    }
+
+    &__input {
+        height: 50px;
+        border: none;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+        padding: 0 10px;
+        font-size: 1.1em;
+        margin-bottom: 12px;
+    }
+
+    &__separator {
+        border-top: 1px solid #b3b3b3;
+        margin: 20px 0;
+    }
+
+    &__submit {
+        align-self: center;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        color: #fff;
+        background-color: var(--green);
+        border: none;
+        border-radius: 60px;
+        width: 237px;
+        padding: 12px;
+        cursor: pointer;
+        transition: transform .3s ease;
+
+        &:active {
+            transform: translateY(2px);
+        }
+    }
+}

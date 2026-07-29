@@ -1,0 +1,51 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --main-color: rgba(61, 61, 61, 1);
+    --accent-color: #b1663c;
+    --green: #1d6154;
+    --bg-color: rgba(255, 254, 248, 1);
+}
+
+body {
+    font-family: "Work Sans", sans-serif;
+    font-size: 14px;
+    color: var(--main-color);
+    background-color: var(--bg-color);
+}
+
+#root {
+    width: 100%;
+    max-width: 1440px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 0 100px;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+a {
+    text-decoration: none;
+    color: var(--main-color);
+}
+
+ul {
+    list-style: none;
+}
+
+h2 {
+    font-family: "Syne", sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    color: var(--green);
+}
