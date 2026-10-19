@@ -2,7 +2,7 @@
 
 Site portfolio d'une architecte d'intérieur, avec un **mode édition** qui permet d'ajouter et de supprimer des projets via une API.
 
-C'est une **réécriture en React + TypeScript** du projet 3 de la formation OpenClassrooms *Intégrateur web*, que j'avais d'abord réalisé en JavaScript (sans framework) :
+C'est une **réécriture en React + TypeScript** du projet 3 de la formation OpenClassrooms *Développeur Web*, que j'avais d'abord réalisé en JavaScript (sans framework) :
 👉 [Version JavaScript](https://github.com/grdRaphael/OC-Projet3-Portfolio-architecte-Sophie-Bluel)
 
 J'ai fait cette version en plus du projet demandé, pour apprendre à construire une application React connectée à une API. Je l'ai ensuite améliorée pour qu'elle reprenne toutes les finitions de la version JS.
