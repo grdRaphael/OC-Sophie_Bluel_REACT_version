@@ -1,0 +1,65 @@
+.contact {
+    width: 50%;
+    margin: 50px auto;
+    text-align: center;
+    // Espace gardé au-dessus de la section quand on y défile (bannière "Mode édition" fixe)
+    scroll-margin-top: 80px;
+
+    &__title {
+        margin-bottom: 20px;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 30px;
+        text-align: left;
+    }
+
+    &__label {
+        font-weight: 500;
+        margin: 2em 0 1em;
+    }
+
+    &__input,
+    &__textarea {
+        border: none;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+        font-family: inherit;
+        font-size: 1.2em;
+        padding: 0 10px;
+    }
+
+    &__input {
+        height: 50px;
+    }
+
+    &__textarea {
+        padding: 10px;
+        resize: vertical;
+    }
+
+    &__submit {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        color: #fff;
+        background-color: var(--green);
+        border: none;
+        border-radius: 60px;
+        width: 180px;
+        margin: 2em auto;
+        padding: 12px;
+        cursor: pointer;
+        transition: transform .3s ease, background-color .3s ease;
+
+        &:active {
+            transform: translateY(2px);
+            background-color: rgba(14, 47, 40, 1);
+        }
+    }
+
+    &__confirmation {
+        text-align: center;
+        color: var(--green);
+    }
+}

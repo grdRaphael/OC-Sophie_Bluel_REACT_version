@@ -11,6 +11,7 @@
     --accent-color: #b1663c;
     --green: #1d6154;
     --bg-color: rgba(255, 254, 248, 1);
+    --page-gutter: 100px;
 }
 
 body {
@@ -18,6 +19,8 @@ body {
     font-size: 14px;
     color: var(--main-color);
     background-color: var(--bg-color);
+    // 100vw inclut la barre de défilement sur certains navigateurs : on évite le scroll horizontal
+    overflow-x: clip;
 }
 
 #root {
@@ -25,7 +28,7 @@ body {
     max-width: 1440px;
     min-height: 100vh;
     margin: 0 auto;
-    padding: 0 100px;
+    padding: 0 var(--page-gutter);
     display: flex;
     flex-direction: column;
 }
