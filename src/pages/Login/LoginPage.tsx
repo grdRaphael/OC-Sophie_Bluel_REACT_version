@@ -5,8 +5,8 @@ import { authenticate } from "../../API/Authenticate"
 import { useAuth } from "../../context/AuthContext"
 
 const LoginPage = () => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("sophie.bluel@test.tld")
+    const [password, setPassword] = useState("S0phie")
     const [error, setError] = useState("")
     const navigate = useNavigate()
     const {login} = useAuth()

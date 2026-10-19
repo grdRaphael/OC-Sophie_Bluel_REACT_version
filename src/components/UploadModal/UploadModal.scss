@@ -112,16 +112,25 @@
         font-family: "Syne", sans-serif;
         font-weight: 700;
         color: #fff;
-        background-color: var(--green);
+        background-color: rgb(167, 167, 167);
         border: none;
         border-radius: 60px;
         width: 237px;
         padding: 12px;
         cursor: pointer;
-        transition: transform .3s ease;
+        transition: transform .3s ease, background-color .3s ease;
 
         &:active {
             transform: translateY(2px);
         }
+
+        &--enabled {
+            background-color: var(--green);
+        }
+    }
+
+    &__error {
+        color: red;
+        text-align: center;
     }
 }
