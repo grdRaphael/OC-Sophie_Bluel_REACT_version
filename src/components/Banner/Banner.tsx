@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import './Banner.scss'
 import { useAuth } from "../../context/AuthContext"
 import editIcon from "../../assets/icons/pen-to-square-regular-full (1).svg"
@@ -22,8 +22,9 @@ const Banner = () => {
                 </div>
                 <nav className="banner__nav">
                     <NavLink className="banner__link" to="/">projets</NavLink>
-                    {/* Contact est une section de l'accueil, pas une page : on vise l'ancre */}
-                    <Link className="banner__link" to="/#contact">contact</Link>
+                    {/* Contact est une section de l'accueil : simple lien vers l'ancre, comme en JS
+                        (la page se recharge et le navigateur gère le défilement) */}
+                    <a className="banner__link" href="/#contact">contact</a>
                     {isLoggedIn
                         ? <button className="banner__link" onClick={logout}>logout</button>
                         : <NavLink className="banner__link" to="/login">login</NavLink>}
