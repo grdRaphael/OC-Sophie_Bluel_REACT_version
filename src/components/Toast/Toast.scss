@@ -12,6 +12,14 @@
     border-radius: 15px;
     border: 1px solid var(--green);
 
+    @media (max-width: 767.98px) {
+        width: 90%;
+        bottom: 10px;
+        padding: 5px 20px;
+        justify-content: center;
+        border: none;
+    }
+
     &__cancel {
         border: none;
         background: none;

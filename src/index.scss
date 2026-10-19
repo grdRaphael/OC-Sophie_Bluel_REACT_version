@@ -52,3 +52,14 @@ h2 {
     font-size: 30px;
     color: var(--green);
 }
+
+// Mobile : même breakpoint que la version JS
+@media (max-width: 767.98px) {
+    :root {
+        --page-gutter: 20px;
+    }
+
+    html {
+        scrollbar-width: none;
+    }
+}

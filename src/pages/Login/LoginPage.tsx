@@ -27,7 +27,7 @@ const LoginPage = () => {
 
     return (
         <section className="login">
-            <h2 className="login__title">Login</h2>
+            <h2 className="login__title">Log in</h2>
             <form className="login__form" onSubmit={handleSubmit}>
                 <div className="login__field">
                     <label className="login__label" htmlFor="email">Email</label>
@@ -54,6 +54,7 @@ const LoginPage = () => {
                 {error && <p className="login__error">{error}</p>}
 
                 <button className="login__submit" type="submit">Se connecter</button>
+                <a className="login__forgot" href="#">Mot de passe oublié</a>
             </form>
         </section>
     )

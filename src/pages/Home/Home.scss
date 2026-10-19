@@ -19,6 +19,18 @@
             margin-bottom: 0.5em;
         }
     }
+
+    // Mobile : photo au-dessus du texte
+    @media (max-width: 767.98px) {
+        flex-direction: column;
+        gap: 30px;
+        margin: 0 0 50px;
+
+        &__photo {
+            width: 80%;
+            height: auto;
+        }
+    }
 }
 
 .portfolio {

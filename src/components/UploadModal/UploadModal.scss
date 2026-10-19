@@ -133,4 +133,31 @@
         color: red;
         text-align: center;
     }
+
+    // Mobile : modale en plein écran, zone d'ajout de photo plus grande
+    @media (max-width: 767.98px) {
+        width: 100vw;
+        height: 100vh;
+        max-height: none;
+        padding: 90px 30px;
+        border-radius: 0;
+
+        &__box {
+            min-height: 300px;
+        }
+
+        &__box-icon {
+            height: 150px;
+        }
+
+        &__box-label {
+            font-size: 20px;
+        }
+
+        &__box-preview {
+            height: 300px;
+            max-width: 100%;
+            object-fit: contain;
+        }
+    }
 }

@@ -4,6 +4,12 @@
     gap: 15px;
     margin: 50px 0;
 
+    // Mobile : boutons empilés, sur toute la largeur
+    @media (max-width: 767.98px) {
+        flex-direction: column;
+        margin: 40px 20px;
+    }
+
     &__btn {
         font-family: "Syne", sans-serif;
         font-weight: 700;

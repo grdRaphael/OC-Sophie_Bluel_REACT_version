@@ -4,6 +4,10 @@
     grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
 
+    @media (max-width: 767.98px) {
+        grid-template-columns: 1fr;
+    }
+
     &__img {
         width: 100%;
         animation: smoothAppear .3s ease;

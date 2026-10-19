@@ -9,6 +9,19 @@
         margin-top: calc(50px + 59px);
     }
 
+    // Mobile : logo au-dessus de la nav, ligne de séparation sur toute la largeur
+    @media (max-width: 767.98px) {
+        flex-direction: column;
+        gap: 20px;
+        margin: 15px calc(50% - 50vw) 50px;
+        border-bottom: 2px solid rgba(123, 123, 123, 0.1);
+
+        // Répété ici, sinon le "margin" ci-dessus écraserait le décalage du mode édition
+        &--edit-mode {
+            margin-top: calc(15px + 59px);
+        }
+    }
+
     &__logo {
         display: flex;
         flex-direction: column;
@@ -32,6 +45,11 @@
         display: flex;
         align-items: center;
         gap: 44px;
+
+        @media (max-width: 767.98px) {
+            gap: 30px;
+            padding: 10px;
+        }
     }
 
     &__link {
