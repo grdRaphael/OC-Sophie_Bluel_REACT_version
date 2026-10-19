@@ -1,75 +1,104 @@
-# React + TypeScript + Vite
+# Sophie Bluel — Portfolio d'architecte d'intérieur (version React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Site portfolio d'une architecte d'intérieur, avec un **mode édition** qui permet d'ajouter et de supprimer des projets via une API.
 
-Currently, two official plugins are available:
+C'est une **réécriture en React + TypeScript** du projet 3 de la formation OpenClassrooms *Intégrateur web*, que j'avais d'abord réalisé en JavaScript (sans framework) :
+👉 [Version JavaScript](https://github.com/grdRaphael/OC-Projet3-Portfolio-architecte-Sophie-Bluel)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+J'ai fait cette version en plus du projet demandé, pour apprendre à construire une application React connectée à une API. Je l'ai ensuite améliorée pour qu'elle reprenne toutes les finitions de la version JS.
 
-## React Compiler
+## Fonctionnalités
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Pour les visiteurs**
+- Galerie des projets, chargée depuis l'API
+- Filtres par catégorie
+- Section contact
 
-## Expanding the ESLint configuration
+**Pour l'architecte (après connexion)**
+- Connexion par e-mail / mot de passe (token JWT), avec messages d'erreur
+- Bannière « Mode édition » et bouton « Modifier »
+- Modale de gestion de la galerie :
+  - **suppression** d'un projet avec un toast **« Annuler »** : la suppression ne devient définitive qu'après 5 secondes
+  - **ajout** d'un projet (photo, titre, catégorie) avec aperçu de l'image et validation du formulaire (messages par champ, bouton actif seulement quand tout est rempli)
+- Animations d'ouverture et de fermeture des modales, et glissement entre les deux modales sur mobile
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**Responsive** : mise en page adaptée aux écrans de moins de 768 px.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Technologies
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **React 19** + **TypeScript**
+- **Vite** (serveur de développement et build)
+- **React Router** (pages accueil / connexion)
+- **Context API** pour l'authentification (`AuthContext`)
+- **SCSS** avec la convention **BEM**
+- **ESLint**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Lancer le projet
 
+Le site a besoin du **backend Node.js fourni par OpenClassrooms**, qui se trouve dans le dépôt de la version JavaScript.
+
+### 1. Backend (port 5678)
+
+```bash
+git clone git@github.com:grdRaphael/OC-Projet3-Portfolio-architecte-Sophie-Bluel.git
+cd OC-Projet3-Portfolio-architecte-Sophie-Bluel/Backend
+npm install
+npm start
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Laisser ce terminal ouvert. La documentation de l'API (Swagger) est disponible sur http://localhost:5678/api-docs/.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 2. Frontend (port 5173)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Dans un **second terminal** :
+
+```bash
+git clone git@github.com:grdRaphael/OC-Sophie_Bluel_REACT_version.git
+cd OC-Sophie_Bluel_REACT_version
+npm install
+npm run dev
+```
+
+Puis ouvrir http://localhost:5173.
+
+### Compte de test
+
+| E-mail | Mot de passe |
+| --- | --- |
+| `sophie.bluel@test.tld` | `S0phie` (avec un zéro) |
+
+## Structure
 
 ```
+src/
+├── API/            # Appels à l'API (projets, catégories, connexion)
+├── components/     # Banner, Filters, Gallery, GalleryModal, UploadModal, Toast, Contact, Footer, Layout
+├── context/        # AuthContext : token et état de connexion
+├── pages/          # Home, Login
+├── types/          # Types TypeScript (Work, Category)
+├── utils/          # isMobile
+└── index.scss      # Variables, styles globaux et animations
+```
+
+## De JavaScript à React : ce qui a changé
+
+Les fonctionnalités sont les mêmes que dans la version JS, mais la façon de les construire est différente :
+
+- **Décrire un état au lieu de modifier la page.** En JS, je créais et supprimais les éléments à la main (`createElement`, `append`, `remove`). En React, je décris ce qui doit s'afficher en fonction du state : par exemple, les messages d'erreur du formulaire dépendent d'un objet `errors`.
+- **Le toast « Annuler ».** En JS, le minuteur était une variable dans l'écouteur de clic. En React, il est lancé dans un `useEffect` qui dépend du projet « en attente de suppression ». Sa **fonction de nettoyage** fait le `clearTimeout`, donc annuler revient simplement à remettre ce state à `null`.
+- **Les animations de fermeture.** Quand un state change, React retire l'élément immédiatement, sans attendre l'animation. La sortie se fait donc en deux temps : une classe CSS lance l'animation, puis `onAnimationEnd` retire l'élément. Cela m'a fait comprendre pourquoi l'animation de fermeture de ma version JS ne s'affichait jamais : j'y retirais l'élément sans attendre la fin de l'animation.
+- **Des composants qui partagent un même state.** Le projet en attente de suppression est géré dans la page d'accueil (`Home`), car la galerie, la modale et le toast en ont tous besoin.
+
+## Pistes d'amélioration
+
+- **Gestion des erreurs de l'API** : vérifier `res.ok` et afficher un message si l'ajout ou la suppression échoue. Aujourd'hui, l'interface suppose que l'API répond toujours correctement.
+- **Session expirée** : le token expire au bout de 24 h. Il faudrait déconnecter l'utilisateur et le rediriger vers la page de connexion.
+- **États de chargement et d'erreur** pour la galerie, si l'API ne répond pas.
+- **Lien « contact » depuis la page de connexion** : il recharge l'accueil mais ne défile pas jusqu'à la section. Il faudrait gérer l'ancre avec React Router (`useLocation` + `useRef`).
+- **Formulaire de contact** : il n'envoie pas encore de message.
+- **Accessibilité** : respecter `prefers-reduced-motion` pour les animations.
+- **Responsive** : ajouter un palier tablette, et définir le breakpoint à un seul endroit (mixin SCSS).
+
+## Auteur
+
+[grdRaphael](https://github.com/grdRaphael) — formation Intégrateur web, OpenClassrooms
