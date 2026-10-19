@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react'
 import type { Work, Category } from '../../types/types'
 import { getCategories, getWorks } from "../../API/Get"
 import editionLogo from "../../assets/icons/pen-to-square-regular-full black.svg"
-import Modal from '../../components/GaleryModal/GaleryModal'
+import GalleryModal from '../../components/GalleryModal/GalleryModal'
 
 const Home = () => {
 
@@ -64,7 +64,7 @@ const Home = () => {
                             Modifier
                         </button>}
                     {isModalOpen &&
-                        <Modal
+                        <GalleryModal
                             works={works}
                             setWorks={setWorks}
                             setIsModalOpen={setIsModalOpen}

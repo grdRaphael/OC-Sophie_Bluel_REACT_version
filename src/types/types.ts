@@ -9,5 +9,5 @@ export type Work = {
     imageUrl: string
     categoryId: number
     userId: number
-    category: []
+    category: Category
 }

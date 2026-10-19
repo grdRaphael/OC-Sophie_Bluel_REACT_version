@@ -12,7 +12,7 @@
 }
 
 .gallery__modal{
-	height: 90vh;
+	max-height: 90vh;
     border-radius: 10px;
 	padding: 50px 100px;
 	display: flex;
@@ -26,6 +26,11 @@
 
 .gallery__modal h3 {
 	margin-bottom: 46px;
+	text-align: center;
+	font-family: "Work Sans", sans-serif;
+	font-size: 26px;
+	font-weight: 400;
+	color: #000;
 }
 
 .xmark__btn {
@@ -58,6 +63,8 @@
 
     &__img {
         width: 100%;
+        height: 100%;
+        object-fit: cover;
         animation: smoothAppear .3s ease;
     }
 

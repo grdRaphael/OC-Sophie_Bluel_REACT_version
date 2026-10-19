@@ -4,21 +4,8 @@ import previewImg from "../../assets/icons/image-regular-full.svg"
 import './UploadModal.scss'
 import type { Category, Work } from "../../types/types"
 import { useState } from "react"
-import { API_REST } from "../../API/Api"
+import { addWork } from "../../API/Works"
 import { useAuth } from "../../context/AuthContext"
-
-
-
-export async function addNewWork(formdata: FormData, token: string | null) {
-
-
-    const res = await fetch(`${API_REST}/works`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body: formdata
-    })
-    return res.json()
-}
 
 
 type UploadModalProps = {
@@ -26,8 +13,6 @@ type UploadModalProps = {
     setUploadModalOpen: React.Dispatch<React.SetStateAction<boolean>>
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
     setGalleryModalOpen: React.Dispatch<React.SetStateAction<boolean>>
-    newWork:undefined
-    setNewWork: React.Dispatch<React.SetStateAction<undefined>>
     setWorks: React.Dispatch<React.SetStateAction<Work[]>>
 }
 
@@ -46,7 +31,7 @@ const UploadModal = ({ categories, setUploadModalOpen, setIsModalOpen, setGaller
         formData.append("title", title)
         formData.append("category", categoryId)
 
-        const newWork = await addNewWork(formData, token)
+        const newWork = await addWork(formData, token)
         setWorks(prev => [...prev, newWork])
         setUploadModalOpen(false)
         setGalleryModalOpen(true)        
@@ -77,6 +62,7 @@ const UploadModal = ({ categories, setUploadModalOpen, setIsModalOpen, setGaller
                             <p className="upload-modal__box-info">jpg, png : 4mo max</p>
                         </>
                         : <img src={URL.createObjectURL(image)}
+                            alt="Aperçu de la photo"
                             className="upload-modal__box-preview" />}
                 </div>
             </label>
@@ -88,7 +74,7 @@ const UploadModal = ({ categories, setUploadModalOpen, setIsModalOpen, setGaller
                 onChange={(e) => setImage(e.target.files?.[0] ?? null)}
             />
             <form className="upload-modal__form">
-                <label htmlFor="title" className="upload-modal__label">Title</label>
+                <label htmlFor="title" className="upload-modal__label">Titre</label>
                 <input
                     type="text"
                     id="title"

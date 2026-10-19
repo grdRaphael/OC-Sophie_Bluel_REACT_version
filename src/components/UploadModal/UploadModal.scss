@@ -1,11 +1,10 @@
+// Centrée par le fond (.background__modals en flex), comme la modale galerie
 .upload-modal {
-    position: fixed;
-    height: 100vh;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
     z-index: 3;
-    width: 630px;
+    width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
     padding: 50px 100px;
     border-radius: 10px;
     background-color: #fff;

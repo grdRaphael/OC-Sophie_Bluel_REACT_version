@@ -4,6 +4,11 @@
     align-items: center;
     margin: 50px 0;
 
+    // La bannière "Mode édition" est en position fixed : on décale le header de sa hauteur
+    &--edit-mode {
+        margin-top: calc(50px + 59px);
+    }
+
     &__logo {
         display: flex;
         flex-direction: column;
@@ -38,11 +43,7 @@
         cursor: pointer;
 
         &:hover {
-            color: var(--accent-color);
-        }
-
-        &.active {
-            text-decoration: underline;
+            font-weight: 700;
         }
     }
 }
@@ -58,6 +59,10 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+
+    &__icon {
+        height: 15.58px;
+    }
 
     &__label {
         color: #fff;

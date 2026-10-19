@@ -1,10 +1,9 @@
-import Banner from "../../components/Banner/Banner"
-
+// Le header (Banner) est déjà affiché par Layout pour toutes les pages
 const Contact = () => {
     return(
-        <>
-        <Banner/>
-        </>
+        <section className="contact">
+            <h2>Contact</h2>
+        </section>
     )
 }
 
