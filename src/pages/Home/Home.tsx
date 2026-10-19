@@ -9,15 +9,19 @@ import { getCategories, getWorks } from "../../API/Get"
 import editionLogo from "../../assets/icons/pen-to-square-regular-full black.svg"
 import GalleryModal from '../../components/GalleryModal/GalleryModal'
 import Contact from '../../components/Contact/Contact'
+import Toast from '../../components/Toast/Toast'
+import { deleteWork } from '../../API/Works'
 
 const Home = () => {
 
-    const { isLoggedIn } = useAuth()
+    const { isLoggedIn, token } = useAuth()
 
     const [categories, setCategories] = useState<Category[]>([])
     const [works, setWorks] = useState<Work[]>([])
     const [filterId, setFilterId] = useState<number | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
+    // Projet supprimé mais encore annulable (5 secondes), ou null
+    const [pendingDeletion, setPendingDeletion] = useState<Work | null>(null)
 
 
     useEffect(() => {
@@ -34,8 +38,35 @@ const Home = () => {
         fetchWorks()
     }, [])
 
+    // Toast "Annuler" : au bout de 5 secondes, la suppression devient définitive.
+    // Si pendingDeletion change (annulation ou nouvelle suppression), React appelle
+    // d'abord la fonction de nettoyage → clearTimeout, le minuteur précédent est arrêté.
+    useEffect(() => {
+        if (!pendingDeletion) return
 
-    const filtered = works.filter(element =>
+        const timer = setTimeout(() => {
+            deleteWork(pendingDeletion.id, token)
+            setWorks(prev => prev.filter(work => work.id !== pendingDeletion.id))
+            setPendingDeletion(null)
+        }, 5000)
+
+        return () => clearTimeout(timer)
+    }, [pendingDeletion, token])
+
+    const handleDeleteWork = (work: Work) => {
+        // Une seule suppression annulable à la fois : si une autre était en attente,
+        // elle est confirmée tout de suite avant de passer à la nouvelle
+        if (pendingDeletion) {
+            deleteWork(pendingDeletion.id, token)
+            setWorks(prev => prev.filter(prevWork => prevWork.id !== pendingDeletion.id))
+        }
+        setPendingDeletion(work)
+    }
+
+    // Le projet en attente de suppression est masqué partout (galerie et modale)
+    const visibleWorks = works.filter(work => work.id !== pendingDeletion?.id)
+
+    const filtered = visibleWorks.filter(element =>
         filterId ? element.categoryId === filterId : true)
 
 
@@ -66,21 +97,27 @@ const Home = () => {
                         </button>}
                     {isModalOpen &&
                         <GalleryModal
-                            works={works}
+                            works={visibleWorks}
                             setWorks={setWorks}
                             setIsModalOpen={setIsModalOpen}
-                            categories = {categories} />}
+                            categories = {categories}
+                            onDeleteWork={handleDeleteWork} />}
                 </div>
 
                 {!isLoggedIn && <Filters
                     filterId={filterId}
                     setFilterId={setFilterId}
                     categories={categories} />}
-                <Gallery filtered={isLoggedIn ? works : filtered}/>
+                <Gallery filtered={isLoggedIn ? visibleWorks : filtered}/>
 
             </section>
 
             <Contact />
+
+            {pendingDeletion &&
+                <Toast
+                    message="Projet supprimé..."
+                    onCancel={() => setPendingDeletion(null)} />}
         </>
     )
 }

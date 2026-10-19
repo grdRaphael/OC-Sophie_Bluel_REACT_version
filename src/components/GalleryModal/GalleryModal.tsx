@@ -4,22 +4,18 @@ import './GalleryModal.scss'
 import trashcan from "../../assets/icons/trash-can-solid-full.svg"
 import UploadModal from "../UploadModal/UploadModal"
 import { useState } from "react"
-import { deleteWork } from "../../API/Works"
-import { useAuth } from "../../context/AuthContext"
 
 type GalleryModalProps = {
     works: Work[]
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
     categories: Category[]
     setWorks: React.Dispatch<React.SetStateAction<Work[]>>
+    onDeleteWork: (work: Work) => void
 }
 
-const GalleryModal = ({ works, setIsModalOpen, categories, setWorks }: GalleryModalProps) => {
+const GalleryModal = ({ works, setIsModalOpen, categories, setWorks, onDeleteWork }: GalleryModalProps) => {
     const [isGalleryModalOpen, setGalleryModalOpen] = useState(true)
     const [isUploadModalOpen, setUploadModalOpen] = useState(false)
-
-    const {token} = useAuth()
-
 
     return (
         <div className="background__modals"
@@ -41,10 +37,7 @@ const GalleryModal = ({ works, setIsModalOpen, categories, setWorks }: GalleryMo
                             <figure className="gallery_modal__caption" key={work.id} data-id={work.id}>
                                 <img src={work.imageUrl} alt={work.title} className="gallery_modal__img" />
                                 <button className="delete_work__btn"
-                                onClick={()=> {
-                                    deleteWork(work.id, token);
-                                    setWorks(prev => prev.filter(prevWork => prevWork.id !== work.id))
-                                }}
+                                onClick={() => onDeleteWork(work)}
                                 >
                                     <img src={trashcan} alt="Supprimer" />
                                 </button>
