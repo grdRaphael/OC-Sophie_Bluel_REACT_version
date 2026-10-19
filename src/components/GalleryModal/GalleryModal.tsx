@@ -4,6 +4,7 @@ import './GalleryModal.scss'
 import trashcan from "../../assets/icons/trash-can-solid-full.svg"
 import UploadModal from "../UploadModal/UploadModal"
 import { useState } from "react"
+import { isMobile } from "../../utils/isMobile"
 
 type GalleryModalProps = {
     works: Work[]
@@ -17,18 +18,49 @@ const GalleryModal = ({ works, setIsModalOpen, categories, setWorks, onDeleteWor
     const [isGalleryModalOpen, setGalleryModalOpen] = useState(true)
     const [isUploadModalOpen, setUploadModalOpen] = useState(false)
 
+    // Animations de sortie en deux temps : 1) un state ajoute la classe qui lance
+    // l'animation, l'élément reste affiché ; 2) à la fin (onAnimationEnd), on le retire.
+    const [isClosing, setIsClosing] = useState(false)
+    const [isGalleryLeaving, setIsGalleryLeaving] = useState(false)
+
+    const closeModal = () => setIsClosing(true)
+
+    const goToUploadModal = () => {
+        if (isMobile()) {
+            // L'échange de modale se fera à la fin du glissement (slideOut)
+            setIsGalleryLeaving(true)
+        } else {
+            setGalleryModalOpen(false)
+            setUploadModalOpen(true)
+        }
+    }
+
     return (
-        <div className="background__modals"
+        <div className={`background__modals ${isClosing ? "background__modals--closing" : ""}`}
         onClick={(e)=> {
             // On ferme seulement si le clic est sur le fond lui-même, pas sur un enfant
             if(e.target === e.currentTarget){
+                closeModal()
+            }
+        }}
+        onAnimationEnd={(e) => {
+            // animationend remonte depuis les enfants (vignettes, modales) :
+            // on ne réagit qu'à l'animation du fond lui-même
+            if (e.target === e.currentTarget && isClosing) {
                 setIsModalOpen(false)
             }
         }}>
             {isGalleryModalOpen &&
-                <section className="gallery__modal">
+                <section className={`gallery__modal ${isGalleryLeaving ? "gallery__modal--leaving" : ""}`}
+                    onAnimationEnd={(e) => {
+                        if (e.target === e.currentTarget && isGalleryLeaving) {
+                            setIsGalleryLeaving(false)
+                            setGalleryModalOpen(false)
+                            setUploadModalOpen(true)
+                        }
+                    }}>
                     <button className="xmark__btn"
-                        onClick={() => setIsModalOpen(false)}>
+                        onClick={closeModal}>
                         <img src={crossMark} alt="Fermer" />
                     </button>
                     <h3>Galerie photo</h3>
@@ -45,7 +77,7 @@ const GalleryModal = ({ works, setIsModalOpen, categories, setWorks, onDeleteWor
                         ))}
                     </div>
                     <button className="add_photo__button"
-                        onClick={() => { setGalleryModalOpen(false); setUploadModalOpen(true)}}
+                        onClick={goToUploadModal}
                     >Ajouter une photo</button>
                 </section>
             }
@@ -54,7 +86,7 @@ const GalleryModal = ({ works, setIsModalOpen, categories, setWorks, onDeleteWor
             <UploadModal
             categories={categories}
             setUploadModalOpen={setUploadModalOpen}
-            setIsModalOpen={setIsModalOpen}
+            onClose={closeModal}
             setGalleryModalOpen={setGalleryModalOpen}
             setWorks={setWorks}/>}
 

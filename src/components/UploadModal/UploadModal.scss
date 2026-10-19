@@ -11,7 +11,8 @@
     display: flex;
     flex-direction: column;
     gap: 22px;
-    
+    animation: smoothAppear .3s ease;
+
     &__title {
         text-align: center;
         font-family: "Work Sans", sans-serif;
@@ -141,6 +142,12 @@
         max-height: none;
         padding: 90px 30px;
         border-radius: 0;
+        animation: slideIn .3s ease;
+
+        // Placé après "animation: slideIn", sinon slideIn l'écraserait
+        &--leaving {
+            animation: slideOut .3s ease forwards;
+        }
 
         &__box {
             min-height: 300px;

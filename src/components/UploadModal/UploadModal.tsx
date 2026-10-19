@@ -6,6 +6,7 @@ import type { Category, Work } from "../../types/types"
 import { useState } from "react"
 import { addWork } from "../../API/Works"
 import { useAuth } from "../../context/AuthContext"
+import { isMobile } from "../../utils/isMobile"
 
 
 type FormErrors = {
@@ -17,16 +18,23 @@ type FormErrors = {
 type UploadModalProps = {
     categories: Category[]
     setUploadModalOpen: React.Dispatch<React.SetStateAction<boolean>>
-    setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+    onClose: () => void
     setGalleryModalOpen: React.Dispatch<React.SetStateAction<boolean>>
     setWorks: React.Dispatch<React.SetStateAction<Work[]>>
 }
 
-const UploadModal = ({ categories, setUploadModalOpen, setIsModalOpen, setGalleryModalOpen, setWorks }: UploadModalProps) => {
+const UploadModal = ({ categories, setUploadModalOpen, onClose, setGalleryModalOpen, setWorks }: UploadModalProps) => {
     const [title, setTitle] = useState<string>()
     const [categoryId, setCategoryId] = useState<string>()
     const [image, setImage] = useState<File | null>(null)
     const [errors, setErrors] = useState<FormErrors>({})
+    // Sur mobile, la modale glisse avant de laisser la place à la galerie
+    const [isLeaving, setIsLeaving] = useState(false)
+
+    const goBackToGallery = () => {
+        setUploadModalOpen(false)
+        setGalleryModalOpen(true)
+    }
 
     const { token } = useAuth()
 
@@ -49,20 +57,24 @@ const UploadModal = ({ categories, setUploadModalOpen, setIsModalOpen, setGaller
 
         const newWork = await addWork(formData, token)
         setWorks(prev => [...prev, newWork])
-        setUploadModalOpen(false)
-        setGalleryModalOpen(true)        
+        goBackToGallery()
     }
 
 
 
 
     return (
-        <section className="upload-modal">
+        <section className={`upload-modal ${isLeaving ? "upload-modal--leaving" : ""}`}
+            onAnimationEnd={(e) => {
+                if (e.target === e.currentTarget && isLeaving) {
+                    goBackToGallery()
+                }
+            }}>
             <button className="upload-modal__return"
-                onClick={() => { setUploadModalOpen(false); setGalleryModalOpen(true) }}>
+                onClick={() => isMobile() ? setIsLeaving(true) : goBackToGallery()}>
                 <img src={returnBtn} alt="Retour" />
             </button>
-            <button className="upload-modal__close" onClick={() => setIsModalOpen(false)}>
+            <button className="upload-modal__close" onClick={onClose}>
                 <img src={crossMark} alt="Fermer" />
             </button>
 

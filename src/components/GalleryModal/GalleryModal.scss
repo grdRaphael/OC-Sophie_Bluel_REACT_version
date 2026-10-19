@@ -21,7 +21,19 @@
 	position: relative;
 	z-index: 2;
 	width: 650px;
-	overflow-y: auto
+	overflow-y: auto;
+	animation: smoothAppear .3s ease;
+}
+
+// Fermeture : le fond s'efface et la modale descend en disparaissant.
+// "forwards" garde l'état final (invisible) jusqu'à ce que React retire l'élément.
+.background__modals--closing {
+	animation: closeBgModal .3s ease forwards;
+}
+
+.background__modals--closing .gallery__modal,
+.background__modals--closing .upload-modal {
+	animation: smoothClose .3s ease forwards;
 }
 
 .gallery__modal h3 {
@@ -122,6 +134,12 @@
 		max-height: none;
 		border-radius: 0;
 		padding: 50px 40px;
+		animation: slideIn .3s ease;
+	}
+
+	// Placé après la règle ci-dessus, sinon slideIn l'écraserait
+	.gallery__modal--leaving {
+		animation: slideOut .3s ease forwards;
 	}
 
 	.gallery__modal h3 {
