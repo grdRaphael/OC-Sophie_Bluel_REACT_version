@@ -8,6 +8,8 @@ import { addWork } from "../../API/Works"
 import { useAuth } from "../../context/AuthContext"
 import { isMobile } from "../../utils/isMobile"
 
+// Même limite que le backend (multer-config.js)
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024
 
 type FormErrors = {
     title?: string
@@ -87,7 +89,7 @@ const UploadModal = ({ categories, setUploadModalOpen, onClose, setGalleryModalO
                         <>
                             <img src={previewImg} alt="" className="upload-modal__box-icon" />
                             <div className="upload-modal__box-label">+ Ajouter photo</div>
-                            <p className="upload-modal__box-info">jpg, png : 4mo max</p>
+                            <p className="upload-modal__box-info">jpg, png : 10mo max</p>
                         </>
                         : <img src={URL.createObjectURL(image)}
                             alt="Aperçu de la photo"
@@ -100,7 +102,16 @@ const UploadModal = ({ categories, setUploadModalOpen, onClose, setGalleryModalO
                 className="upload-modal__file"
                 accept="image/png, image/jpeg"
                 onChange={(e) => {
-                    setImage(e.target.files?.[0] ?? null)
+                    const file = e.target.files?.[0] ?? null
+                    // Image trop lourde : refusée tout de suite, avec un message
+                    if (file && file.size > MAX_IMAGE_SIZE) {
+                        setImage(null)
+                        setErrors(prev => ({ ...prev, image: "Image trop lourde (10 Mo maximum)" }))
+                        // Vide le champ : choisir à nouveau le même fichier redéclenchera onChange
+                        e.target.value = ""
+                        return
+                    }
+                    setImage(file)
                     setErrors(prev => ({ ...prev, image: undefined }))
                 }}
             />
