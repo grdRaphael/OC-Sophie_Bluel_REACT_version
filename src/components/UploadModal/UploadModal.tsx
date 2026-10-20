@@ -32,6 +32,8 @@ const UploadModal = ({ categories, setUploadModalOpen, onClose, setGalleryModalO
     const [errors, setErrors] = useState<FormErrors>({})
     // Sur mobile, la modale glisse avant de laisser la place à la galerie
     const [isLeaving, setIsLeaving] = useState(false)
+    // Envoi en cours : bloque le bouton pour éviter qu'un double clic crée deux projets
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const goBackToGallery = () => {
         setUploadModalOpen(false)
@@ -57,9 +59,15 @@ const UploadModal = ({ categories, setUploadModalOpen, onClose, setGalleryModalO
         formData.append("title", title)
         formData.append("category", categoryId)
 
-        const newWork = await addWork(formData, token)
-        setWorks(prev => [...prev, newWork])
-        goBackToGallery()
+        setIsSubmitting(true)
+        try {
+            const newWork = await addWork(formData, token)
+            setWorks(prev => [...prev, newWork])
+            goBackToGallery()
+        } finally {
+            // Toujours exécuté, même si l'envoi échoue : le bouton ne reste jamais bloqué
+            setIsSubmitting(false)
+        }
     }
 
 
@@ -146,11 +154,12 @@ const UploadModal = ({ categories, setUploadModalOpen, onClose, setGalleryModalO
                 {/* Gris tant que le formulaire est incomplet, mais toujours cliquable :
                     le clic affiche les messages d'erreur (comme dans la version JS) */}
                 <button className={`upload-modal__submit ${isFormValid ? "upload-modal__submit--enabled" : ""}`}
+                    disabled={isSubmitting}
                     onClick={(e) => {
                         e.preventDefault();
                         handleSubmit();
                     }}
-                >Valider</button>
+                >{isSubmitting ? "Envoi en cours…" : "Valider"}</button>
 
                 {errors.title && <p className="upload-modal__error">{errors.title}</p>}
                 {errors.image && <p className="upload-modal__error">{errors.image}</p>}

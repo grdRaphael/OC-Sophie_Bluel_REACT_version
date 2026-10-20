@@ -128,6 +128,12 @@
         &--enabled {
             background-color: var(--green);
         }
+
+        // Pendant l'envoi : plus de clic possible
+        &:disabled {
+            opacity: .7;
+            cursor: wait;
+        }
     }
 
     &__error {
