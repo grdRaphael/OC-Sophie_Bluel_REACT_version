@@ -4,7 +4,8 @@ import previewImg from "../../assets/icons/image-regular-full.svg"
 import './UploadModal.scss'
 import type { Category, Work } from "../../types/types"
 import { useState } from "react"
-import { addWork } from "../../API/Works"
+import { useNavigate } from "react-router-dom"
+import { addWork, ApiError } from "../../API/Works"
 import { useAuth } from "../../context/AuthContext"
 import { isMobile } from "../../utils/isMobile"
 
@@ -15,6 +16,8 @@ type FormErrors = {
     title?: string
     image?: string
     category?: string
+    // Erreur renvoyée par l'API à l'envoi
+    submit?: string
 }
 
 type UploadModalProps = {
@@ -40,7 +43,8 @@ const UploadModal = ({ categories, setUploadModalOpen, onClose, setGalleryModalO
         setGalleryModalOpen(true)
     }
 
-    const { token } = useAuth()
+    const { token, logout } = useAuth()
+    const navigate = useNavigate()
 
     // Calculé à chaque rendu à partir des states : pas besoin d'un state en plus
     const isFormValid = !!title && !!image && !!categoryId
@@ -64,6 +68,14 @@ const UploadModal = ({ categories, setUploadModalOpen, onClose, setGalleryModalO
             const newWork = await addWork(formData, token)
             setWorks(prev => [...prev, newWork])
             goBackToGallery()
+        } catch (err) {
+            // Token refusé (expiré depuis l'ouverture de la page) : déconnexion et retour à la connexion
+            if (err instanceof ApiError && err.status === 401) {
+                logout()
+                navigate("/login", { state: { message: err.message } })
+                return
+            }
+            setErrors(prev => ({ ...prev, submit: err instanceof Error ? err.message : "L'ajout du projet a échoué" }))
         } finally {
             // Toujours exécuté, même si l'envoi échoue : le bouton ne reste jamais bloqué
             setIsSubmitting(false)
@@ -164,6 +176,7 @@ const UploadModal = ({ categories, setUploadModalOpen, onClose, setGalleryModalO
                 {errors.title && <p className="upload-modal__error">{errors.title}</p>}
                 {errors.image && <p className="upload-modal__error">{errors.image}</p>}
                 {errors.category && <p className="upload-modal__error">{errors.category}</p>}
+                {errors.submit && <p className="upload-modal__error">{errors.submit}</p>}
             </form>
         </section>
     )

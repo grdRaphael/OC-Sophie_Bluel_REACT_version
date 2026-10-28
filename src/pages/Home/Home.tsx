@@ -3,7 +3,8 @@ import Filters from '../../components/Filters/Filters'
 import Gallery from '../../components/Gallery'
 import { useAuth } from '../../context/AuthContext'
 import "./Home.scss"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { Work, Category } from '../../types/types'
 import { getCategories, getWorks } from "../../API/Get"
 import editionLogo from "../../assets/icons/pen-to-square-regular-full black.svg"
@@ -14,7 +15,18 @@ import { deleteWork } from '../../API/Works'
 
 const Home = () => {
 
-    const { isLoggedIn, token } = useAuth()
+    const { isLoggedIn, token, logout } = useAuth()
+    const navigate = useNavigate()
+
+    // Suppression envoyée à l'API. Token refusé (401, expiré) : déconnexion et retour à la connexion
+    // (en revenant, la galerie est rechargée : le projet non supprimé réapparaît)
+    const confirmDeletion = useCallback(async (id: number) => {
+        const status = await deleteWork(id, token)
+        if (status === 401) {
+            logout()
+            navigate("/login", { state: { message: "Session expirée, veuillez vous reconnecter" } })
+        }
+    }, [token, logout, navigate])
 
     const [categories, setCategories] = useState<Category[]>([])
     const [works, setWorks] = useState<Work[]>([])
@@ -45,19 +57,19 @@ const Home = () => {
         if (!pendingDeletion) return
 
         const timer = setTimeout(() => {
-            deleteWork(pendingDeletion.id, token)
+            confirmDeletion(pendingDeletion.id)
             setWorks(prev => prev.filter(work => work.id !== pendingDeletion.id))
             setPendingDeletion(null)
         }, 5000)
 
         return () => clearTimeout(timer)
-    }, [pendingDeletion, token])
+    }, [pendingDeletion, confirmDeletion])
 
     const handleDeleteWork = (work: Work) => {
         // Une seule suppression annulable à la fois : si une autre était en attente,
         // elle est confirmée tout de suite avant de passer à la nouvelle
         if (pendingDeletion) {
-            deleteWork(pendingDeletion.id, token)
+            confirmDeletion(pendingDeletion.id)
             setWorks(prev => prev.filter(prevWork => prevWork.id !== pendingDeletion.id))
         }
         setPendingDeletion(work)

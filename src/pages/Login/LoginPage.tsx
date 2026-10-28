@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import "./Login.scss"
 import { authenticate } from "../../API/Authenticate"
 import { useAuth } from "../../context/AuthContext"
@@ -7,7 +7,9 @@ import { useAuth } from "../../context/AuthContext"
 const LoginPage = () => {
     const [email, setEmail] = useState("sophie.bluel@test.tld")
     const [password, setPassword] = useState("S0phie")
-    const [error, setError] = useState("")
+    // Message transmis par la page précédente (ex. "Session expirée" après un refus de l'API)
+    const location = useLocation()
+    const [error, setError] = useState<string>(location.state?.message ?? "")
     const navigate = useNavigate()
     const {login} = useAuth()
 
